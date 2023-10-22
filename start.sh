@@ -1,5 +1,5 @@
 make num_dataset=1
 
-./graficos.sh
+# ./graficos.sh
 
 rm main.o

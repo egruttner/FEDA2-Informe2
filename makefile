@@ -4,20 +4,15 @@ CFLAGS = -std=c++14 -O2
 SRCS = main.cpp 
 OBJS = $(SRCS:.cpp=.o)
 
-TEST_CASES_NUMBER := $(shell seq 1 5) #rango de archivos de input y output
+TEST_CASES_NUMBER := $(shell seq 1) #rango de archivos de input y output
 
 # Experimentos con posición fija, cambio de tamaño
-RANGE_1 = 1 2 3 4 5 6
+RANGE_1 = 1
 
-# -> BINOMIAL HEAP
-# 1 INSERCIÓN
-# 2 UNIÓN
-# 3 ELIMINACIÓN
+# 1 Boyer-Moore-Horspool
+# 2 Sufijos
+# 3 FM-Index
 
-# -> BINARY HEAP
-# 4 INSERCIÓN
-# 5 UNIÓN
-# 6 ELIMINACIÓN
 
 INPUT_PREFIX := datasets/input$(num_dataset)/input
 

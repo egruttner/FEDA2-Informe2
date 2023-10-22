@@ -1,5 +1,5 @@
 #include <chrono>
-#include "heaps.h"
+#include "algoritmos_strings.h"
 #include <fstream>
 
 using namespace std;
@@ -13,19 +13,17 @@ int main(int argv, char* argc[]) {
   int id_proceso_selecionado;
   string nombre_archivo_salida;
 
+  int numero_de_experimentos=1; //Deben ser 30
+
   cout<<"INICIO"<<endl;
 
   //TIPOS DE PRUEBAS
   switch(atoi(argc[1]))
   {
 
-    case 1: proceso_selecionado = "binomial_heap-insercion"; break;
-    case 2: proceso_selecionado = "binomial_heap-union"; break;
-    case 3: proceso_selecionado = "binomial_heap-eliminacion"; break;
-
-    case 4: proceso_selecionado = "binary_heap-insercion"; break;
-    case 5: proceso_selecionado = "binary_heap-union"; break;
-    case 6: proceso_selecionado = "binary_heap-eliminacion"; break;
+    case 1: proceso_selecionado = "Boyer-Moore-Horspool"; break;
+    case 2: proceso_selecionado = "Sufijos"; break;
+    case 3: proceso_selecionado = "FM-Index"; break;
 
     default: proceso_selecionado = ""; break;
   }
@@ -50,23 +48,13 @@ int main(int argv, char* argc[]) {
     //BUSQUEDA SELECCIONADA COMO PARAMETRO
     id_proceso_selecionado = atoi(argc[1]);
 
-    //DEFINE MATRICES DE ENTRADA
-    vector<int> A(n);   //VECTOR A
-
-    //LEE VECTOR
-    for(auto &row : A)
-      {
-          cin>>row;
-      }
-
     nombre_archivo_salida = dir_csv + proceso_selecionado + "_results.csv";
     ofstream outfile(nombre_archivo_salida,std::ios::app);
 
     double mm_total_time = 0;
-    int numero_de_experimentos=30;
     for(int j = 0; j < numero_de_experimentos; j++){ 
       
-      long long single_execution_time = execution_time_ms(A, id_proceso_selecionado);
+      long long single_execution_time = execution_time_ms(id_proceso_selecionado);
       
       mm_total_time += single_execution_time;
     }
