@@ -2,62 +2,73 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <sstream>
+#include <fstream>
 
 using namespace std;
 
-// Boyer-Moore-Horspool
-// Función para preprocesar el patrón y calcular la tabla de saltos de Horspool
-vector<int> calculateShiftTable(const string& pattern) {
+vector<int> precomputeShifts(const string& pattern) 
+{
+    std::vector<int> shifts(256, pattern.length());
     int m = pattern.length();
-    vector<int> shiftTable(256, m); // Inicializar con el tamaño del patrón
-
-    for (int i = 0; i < m - 1; i++) {
-        shiftTable[static_cast<int>(pattern[i])] = m - 1 - i;
+    for (int i = 0; i < m - 1; ++i) {
+        shifts[static_cast<unsigned char>(pattern[i])] = m - 1 - i;
     }
-
-    return shiftTable;
+    return shifts;
 }
 
-// Función para contar las ocurrencias del patrón en el texto utilizando Horspool
-int count(const string& T, const string& p) {
-    int n = T.length();
-    int m = p.length();
-    vector<int> shiftTable = calculateShiftTable(p);
-    int count = 0;
+int searchHorspoolInText(const string& text, const string& pattern) {
+    int n = text.length();
+    int m = pattern.length();
+
+    vector<int> shifts = precomputeShifts(pattern);
     int i = 0;
+    int count = 0;
 
     while (i <= n - m) {
         int j = m - 1;
-        while (j >= 0 && T[i + j] == p[j]) {
+        while (j >= 0 && pattern[j] == text[i + j]) {
             j--;
         }
 
         if (j < 0) {
             count++;
-            i += shiftTable[static_cast<int>(T[i + m - 1])];
+            i += shifts[static_cast<unsigned char>(text[i + m - 1])];
         } else {
-            i += shiftTable[static_cast<int>(T[i + m - 1])];
+            i += shifts[static_cast<unsigned char>(text[i + m - 1])];
         }
     }
 
     return count;
 }
 
+void cuenta_Horspool()
+{
+  string fileName = "datasets/input1/input5.txt";
+  ifstream file(fileName);
+    if (!file.is_open()) {
+        cerr << "No se pudo abrir el archivo." << endl;
+    }
+    string pattern = "for";
+    string text((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
+
+    int occurrences = searchHorspoolInText(text, pattern);
+
+    file.close();
+
+    cout << "El patrón '" << pattern << "' aparece " << occurrences << " veces en el archivo." << endl;
+
+}
 
 
 //PARA TOMAR EL TIEMPO
 long long execution_time_ms(int id_proceso_seleccionado) {
 
-  string T = "aaaaabcababcababcabcabc";
-  string p = "abc";
-  int occurrences = 0;
-
   auto start_time = std::chrono::high_resolution_clock::now();
   switch (id_proceso_seleccionado)
   {
   case 1: //Boyer-Moore-Horspool
-    occurrences = count(T, p);
-    cout << "El patrón '" << p << "' aparece " << occurrences << " veces en el texto." << endl;
+    cuenta_Horspool();
     break;
 
   case 2: //Sufijos
@@ -71,19 +82,6 @@ long long execution_time_ms(int id_proceso_seleccionado) {
   }
 
 
-/*
-    switch (id_proceso_seleccionado)
-    {
-      case 1: 
-        int occurrences = count(T, p);
-        cout << "El patrón '" << p << "' aparece " << occurrences << " veces en el texto." << endl;
-        break;
-
-
-
-      default:
-    }
-*/
   auto end_time = std::chrono::high_resolution_clock::now();
   return std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
 }

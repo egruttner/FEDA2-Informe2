@@ -1,2 +1,2 @@
 INICIO
-El patrón 'abc' aparece 5 veces en el texto.
+El patrón 'for' aparece 51 veces en el archivo.
