@@ -1,2 +1,2 @@
 INICIO
-El patrón 'for' aparece 51 veces en el archivo.
+El patrón 'for' aparece 10 veces en el archivo.
